@@ -1,6 +1,5 @@
+import 'server-only'
 import db from "../db";
-import {Beverage} from "../beverages/model";
-import {Bar} from "../bars/model";
 
 export class Session {
     id: string
