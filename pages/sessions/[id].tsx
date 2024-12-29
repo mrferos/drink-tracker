@@ -9,6 +9,8 @@ import BottomDrawer from "../../components/BottomDrawer";
 import put from "../../lib/ajax/put";
 import CooldownTimer from "../../components/CooldownTimer";
 
+import {Session as SessionModel} from "../../lib/sessions/class";
+
 const tillNextDrinkKey = "till_next_drink_key";
 
 export default function Session() {
@@ -18,7 +20,7 @@ export default function Session() {
     const [bars, setBars] = useState(new Map)
     const [beverages, setBeverages] = useState(new Map)
     const [drinks, setDrinks] = useState([])
-    const [session, setSession] = useState({})
+    const [session, setSession] = useState<SessionModel>(new SessionModel())
     const [timeForNextDrink, setTimeForNextDrink] = useState(-1)
 
     const disabled = fString == 'true'

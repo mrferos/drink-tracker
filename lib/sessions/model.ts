@@ -1,12 +1,6 @@
 import 'server-only'
 import db from "../db";
-
-export class Session {
-    id: string
-    name: string
-    startTs: number
-    endTs: number
-}
+import {Session} from "./class";
 
 export class SessionDrink {
     id: number
