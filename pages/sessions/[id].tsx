@@ -7,6 +7,7 @@ import React from "react";
 import moment from "moment";
 import BottomDrawer from "../../components/BottomDrawer";
 import put from "../../lib/ajax/put";
+import CooldownTimer from "../../components/CooldownTimer";
 
 export default function Session() {
     const router = useRouter()
@@ -15,6 +16,7 @@ export default function Session() {
     const [bars, setBars] = useState(new Map)
     const [beverages, setBeverages] = useState(new Map)
     const [drinks, setDrinks] = useState([])
+    const [secondsTillNextDrink, setSecondsTillNextDrink] = useState(0)
     const disabled = fString == 'true'
 
     const saveDrink = async (saveData) => {
@@ -34,6 +36,8 @@ export default function Session() {
             bar_id: saveData.barId,
             time: time,
         }, ...drinks])
+
+        setSecondsTillNextDrink(prev => prev + 3600)
     }
 
     const onSave = async (saveData) => {
@@ -85,6 +89,7 @@ export default function Session() {
 
     return (
         <>
+        {secondsTillNextDrink > 0 && <CooldownTimer remainingSeconds={secondsTillNextDrink} setRemainingSeconds={setSecondsTillNextDrink} />}
             <Table striped>
                 <thead>
                 <tr>

@@ -7,6 +7,7 @@ import {useRouter} from "next/router";
 import Head from "next/head";
 import moment from "moment";
 import Link from "next/link";
+import CooldownTimer from "../components/CooldownTimer";
 
 export default function Sessions() {
     const [isLoading, setIsLoading] = useState(true);
