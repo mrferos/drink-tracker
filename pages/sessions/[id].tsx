@@ -62,6 +62,8 @@ export default function Session() {
     }
 
     const finishSession = async () => {
+        localStorage.setItem(secondsKey, "-1")
+
         await put(`/api/sessions/${sessionId}`, {
             end_ts: (new Date().getTime()/1000)
         })
