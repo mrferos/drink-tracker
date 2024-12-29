@@ -3,6 +3,7 @@ import {Alert} from "react-bootstrap";
 import moment from "moment";
 import momentSetup from "moment-duration-format";
 
+// @ts-ignore
 momentSetup(moment)
 
 export default function CooldownTimer({ remainingSeconds, setRemainingSeconds }) {

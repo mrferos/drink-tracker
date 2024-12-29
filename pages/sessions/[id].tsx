@@ -9,6 +9,8 @@ import BottomDrawer from "../../components/BottomDrawer";
 import put from "../../lib/ajax/put";
 import CooldownTimer from "../../components/CooldownTimer";
 
+const secondsKey = "seconds_till_next_drink"
+
 export default function Session() {
     const router = useRouter()
     const { id:sessionId, finished: fString } = router.query
@@ -16,7 +18,8 @@ export default function Session() {
     const [bars, setBars] = useState(new Map)
     const [beverages, setBeverages] = useState(new Map)
     const [drinks, setDrinks] = useState([])
-    const [secondsTillNextDrink, setSecondsTillNextDrink] = useState(0)
+    const [secondsTillNextDrink, setSecondsTillNextDrink] = useState(-1)
+
     const disabled = fString == 'true'
 
     const saveDrink = async (saveData) => {
@@ -67,7 +70,18 @@ export default function Session() {
     }
 
     useEffect(() => {
+        if(secondsTillNextDrink >= 0) {
+            localStorage.setItem(secondsKey, JSON.stringify(secondsTillNextDrink))
+        }
+    }, [secondsTillNextDrink]);
+
+    useEffect(() => {
         if (!router.isReady || !router.query.id) return;
+
+        const storedValue = localStorage.getItem(secondsKey)
+        if (storedValue !== null) {
+            setSecondsTillNextDrink(parseInt(storedValue, 10))
+        }
 
         Promise.all([
             fetch('/api/bars').then(res => res.json()),
