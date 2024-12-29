@@ -18,6 +18,7 @@ export default function Session() {
     const [bars, setBars] = useState(new Map)
     const [beverages, setBeverages] = useState(new Map)
     const [drinks, setDrinks] = useState([])
+    const [session, setSession] = useState({})
     const [secondsTillNextDrink, setSecondsTillNextDrink] = useState(-1)
 
     const disabled = fString == 'true'
@@ -88,14 +89,16 @@ export default function Session() {
         Promise.all([
             fetch('/api/bars').then(res => res.json()),
             fetch('/api/beverages').then(res => res.json()),
+            fetch(`/api/sessions/${sessionId}`).then(res => res.json()),
             fetch(`/api/sessions/${sessionId}/drinks`).then(res => res.json()),
-        ]).then(([bars, beverages, fetchedDrinks]) => {
+        ]).then(([bars, beverages, session, fetchedDrinks]) => {
             const barMap = new Map()
             const beverageMap = new Map()
             const drinks = []
             bars.map(bar => barMap.set(bar.id.toString(), bar))
             beverages.map(beverage => beverageMap.set(beverage.id.toString(), beverage))
             fetchedDrinks.map(drink => drinks.push(drink))
+            setSession(session)
             setBars(barMap)
             setBeverages(beverageMap)
             setDrinks(drinks)
@@ -106,6 +109,7 @@ export default function Session() {
     return (
         <>
         {secondsTillNextDrink > 0 && <CooldownTimer remainingSeconds={secondsTillNextDrink} setRemainingSeconds={setSecondsTillNextDrink} />}
+            <h1>{session.name}</h1>
             <Table striped>
                 <thead>
                 <tr>
