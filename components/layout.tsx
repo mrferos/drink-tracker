@@ -31,7 +31,7 @@ export default function App({children}) {
                 </Container>
             </Navbar>
 
-            <main style={{ paddingTop: '56px', paddingBottom: '20px' }}>
+            <main style={{ paddingTop: '56px', paddingBottom: '20px', paddingLeft: '5px', paddingRight: '5px' }}>
                 {children}
             </main>
         </>

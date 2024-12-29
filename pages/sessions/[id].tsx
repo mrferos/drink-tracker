@@ -108,8 +108,10 @@ export default function Session() {
 
     return (
         <>
-        {secondsTillNextDrink > 0 && <CooldownTimer remainingSeconds={secondsTillNextDrink} setRemainingSeconds={setSecondsTillNextDrink} />}
             <h1>{session.name}</h1>
+            {secondsTillNextDrink > 0 &&
+                <CooldownTimer remainingSeconds={secondsTillNextDrink} setRemainingSeconds={setSecondsTillNextDrink}/>}
+
             <Table striped>
                 <thead>
                 <tr>
@@ -123,24 +125,27 @@ export default function Session() {
                 {drinks.map(drink => {
                     return (
                         <React.Fragment key={drink.id}>
-                        <tr>
-                            <td>{moment.unix(drink.time).format("YYYY-MM-DD hh:mm")}</td>
-                            <td>{beverages.get(drink.beverage_id.toString()).name}</td>
-                            <td>{bars.get(drink.bar_id.toString()).name}</td>
-                            <td>
-                                <Button onClick={onClickFn(drink.id)} disabled={disabled}>+</Button>
-                            </td>
-                        </tr>
+                            <tr>
+                                <td>{moment.unix(drink.time).format("YYYY-MM-DD hh:mm")}</td>
+                                <td>{beverages.get(drink.beverage_id.toString()).name}</td>
+                                <td>{bars.get(drink.bar_id.toString()).name}</td>
+                                <td>
+                                    <Button onClick={onClickFn(drink.id)} disabled={disabled}>+</Button>
+                                </td>
+                            </tr>
                         </React.Fragment>
                     )
                 })}
                 </tbody>
             </Table>
             <BottomDrawer>
-                <Button variant="primary" size={"lg"} className={"w-100"} onClick={() => setModalShow(true)} disabled={disabled}>Add Drink</Button>
-                <Button variant="danger" size={"lg"} className={"w-100"} style={{marginTop: "5px"}} onClick={() => finishSession()} disabled={disabled}>Finished</Button>
+                <Button variant="primary" size={"lg"} className={"w-100"} onClick={() => setModalShow(true)}
+                        disabled={disabled}>Add Drink</Button>
+                <Button variant="danger" size={"lg"} className={"w-100"} style={{marginTop: "5px"}}
+                        onClick={() => finishSession()} disabled={disabled}>Finished</Button>
             </BottomDrawer>
-            <AddDrinkDialogue modalShow={modalShow} setModalShow={setModalShow} onSave={onSave} bars={bars} beverages={beverages}/>
+            <AddDrinkDialogue modalShow={modalShow} setModalShow={setModalShow} onSave={onSave} bars={bars}
+                              beverages={beverages}/>
         </>
     )
 }
