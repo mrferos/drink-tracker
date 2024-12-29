@@ -66,7 +66,7 @@ export async function create(session: Session): Promise<Session> {
 }
 
 export async function findBy(args: any): Promise<Session[]> {
-    const resp = await db("sessions").select('*').where(args)
+    const resp = await db("sessions").select('*').where(args).orderBy("start_ts", "desc")
     if(!resp) return []
 
     return resp.map(row => {
