@@ -9,7 +9,7 @@ import BottomDrawer from "../../components/BottomDrawer";
 import put from "../../lib/ajax/put";
 import CooldownTimer from "../../components/CooldownTimer";
 
-const secondsKey = "seconds_till_next_drink"
+const tillNextDrinkKey = "till_next_drink_key";
 
 export default function Session() {
     const router = useRouter()
@@ -19,7 +19,7 @@ export default function Session() {
     const [beverages, setBeverages] = useState(new Map)
     const [drinks, setDrinks] = useState([])
     const [session, setSession] = useState({})
-    const [secondsTillNextDrink, setSecondsTillNextDrink] = useState(-1)
+    const [timeForNextDrink, setTimeForNextDrink] = useState(-1)
 
     const disabled = fString == 'true'
 
@@ -41,7 +41,17 @@ export default function Session() {
             time: time,
         }, ...drinks])
 
-        setSecondsTillNextDrink(prev => prev + 3600)
+        setTimeForNextDrink(prev => {
+            let time = moment()
+            if(prev > -1) {
+                time = moment.unix(prev)
+            }
+
+            time = time.add(1, 'hours')
+            localStorage.setItem(tillNextDrinkKey, JSON.stringify(time.unix()))
+
+            return time.unix()
+        })
     }
 
     const onSave = async (saveData) => {
@@ -63,7 +73,7 @@ export default function Session() {
     }
 
     const finishSession = async () => {
-        localStorage.setItem(secondsKey, "-1")
+        localStorage.setItem(tillNextDrinkKey, "-1")
 
         await put(`/api/sessions/${sessionId}`, {
             end_ts: (new Date().getTime()/1000)
@@ -73,17 +83,11 @@ export default function Session() {
     }
 
     useEffect(() => {
-        if(secondsTillNextDrink >= 0) {
-            localStorage.setItem(secondsKey, JSON.stringify(secondsTillNextDrink))
-        }
-    }, [secondsTillNextDrink]);
-
-    useEffect(() => {
         if (!router.isReady || !router.query.id) return;
 
-        const storedValue = localStorage.getItem(secondsKey)
+        const storedValue = localStorage.getItem(tillNextDrinkKey)
         if (storedValue !== null) {
-            setSecondsTillNextDrink(parseInt(storedValue, 10))
+            setTimeForNextDrink(parseInt(storedValue, 10))
         }
 
         Promise.all([
@@ -109,8 +113,8 @@ export default function Session() {
     return (
         <>
             <h1>{session.name}</h1>
-            {secondsTillNextDrink > 0 &&
-                <CooldownTimer remainingSeconds={secondsTillNextDrink} setRemainingSeconds={setSecondsTillNextDrink}/>}
+            {timeForNextDrink > 0 &&
+                <CooldownTimer timeForNextDrink={timeForNextDrink} />}
 
             <Table striped>
                 <thead>

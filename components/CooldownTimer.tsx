@@ -6,21 +6,27 @@ import momentSetup from "moment-duration-format";
 // @ts-ignore
 momentSetup(moment)
 
-export default function CooldownTimer({ remainingSeconds, setRemainingSeconds }) {
+export default function CooldownTimer({ timeForNextDrink }) {
+    const [duration, setDuration] = useState(0);
+
     useEffect(() => {
         const interval = setInterval(() => {
-            setRemainingSeconds(prev => prev - 1)
+            setDuration(timeForNextDrink - moment().unix())
         }, 1000);
 
         // Cleanup interval on unmount
         return () => clearInterval(interval);
-    }, []);
+    }, [timeForNextDrink]);
+
+    if(duration === 0){
+        return null
+    }
 
     return (
         <Alert variant="danger" style={{margin: "5px"}}>
             <Alert.Heading>Time till next drink...</Alert.Heading>
             <p className="mb-0 text-center" style={{fontSize: "75px"}}>
-                {moment.duration(remainingSeconds, "seconds").format()}
+                {moment.duration(duration, 'seconds').format()}
             </p>
         </Alert>
     )
