@@ -7,7 +7,6 @@ CREATE TABLE bars
     lat  REAL    not null,
     long real    not null
 );
-CREATE TABLE sqlite_sequence(name,seq);
 CREATE TABLE beverages
 (
     id               integer not null
