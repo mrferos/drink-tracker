@@ -16,17 +16,6 @@ CREATE TABLE beverages
     proof_percentage integer not null,
     volume_in_ml     integer not null
 );
-CREATE TABLE IF NOT EXISTS "users"
-(
-    id       integer not null
-        constraint users_pk
-            primary key,
-    name     text    not null,
-    password text    not null,
-    email    text    not null
-        constraint users_pk_2
-            unique
-);
 CREATE TABLE config
 (
     id    integer
