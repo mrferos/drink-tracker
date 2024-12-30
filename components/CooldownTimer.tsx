@@ -11,14 +11,18 @@ export default function CooldownTimer({ timeForNextDrink }) {
 
     useEffect(() => {
         const interval = setInterval(() => {
-            setDuration(timeForNextDrink - moment().unix())
+            const newDuration = timeForNextDrink - moment().unix()
+            setDuration(newDuration)
+            if(newDuration <= 0) {
+                clearInterval(interval)
+            }
         }, 1000);
 
         // Cleanup interval on unmount
         return () => clearInterval(interval);
     }, [timeForNextDrink]);
 
-    if(duration === 0){
+    if(duration <= 0){
         return null
     }
 

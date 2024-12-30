@@ -45,11 +45,11 @@ export default function Session() {
 
         setTimeForNextDrink(prev => {
             let time = moment()
-            if(prev > -1) {
+            if(prev > time.unix()) {
                 time = moment.unix(prev)
             }
 
-            time = time.add(1, 'hours')
+            time = time.add(10, 'second')
             localStorage.setItem(tillNextDrinkKey, JSON.stringify(time.unix()))
 
             return time.unix()
