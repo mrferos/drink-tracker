@@ -1,8 +1,19 @@
 import {Card} from "react-bootstrap";
 import {useEffect, useState} from "react";
 
+interface Sums {
+    daySum: number;
+    weekSum: number;
+    monthSum: number;
+}
+
 export default function Index() {
-    const [sums, setSums] = useState({});
+    const [sums, setSums] = useState<Sums>({
+        daySum: 0,
+        weekSum: 0,
+        monthSum: 0,
+    });
+    
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
