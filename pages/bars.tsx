@@ -50,7 +50,7 @@ export default function Bars() {
                 <thead>
                 <tr>
                     <th>Name</th>
-                    <th>Link to Google Maps</th>
+                    <th>Link to Maps</th>
                 </tr>
                 </thead>
                 <tbody>
