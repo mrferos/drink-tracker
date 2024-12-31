@@ -3,7 +3,8 @@ import {useEffect, useState} from "react";
 import post from "../lib/ajax/post";
 
 export default function AddBarDialogue({modalShow, setModalShow, editing, onSave}) {
-    const [latLong, setLatLong] = useState([0, 0])
+    const [latitude, setLatitude] = useState("")
+    const [longitude, setLongitude] = useState("")
     const [llDisabled, setLlDisabled] = useState(true)
     const [csDisabled, setCSDisabled] = useState(true)
     const [city, setCity] = useState("")
@@ -16,8 +17,13 @@ export default function AddBarDialogue({modalShow, setModalShow, editing, onSave
     }
 
     useEffect(() => {
+        if(!modalShow) {
+            return
+        }
+
         navigator.geolocation.getCurrentPosition(({coords}) => {
-            setLatLong([coords.latitude, coords.longitude])
+            setLatitude(coords.latitude.toString())
+            setLongitude(coords.longitude.toString())
             setLlDisabled(false)
             post('/api/geocoding/reverse', {
                 lat: coords.latitude,
@@ -29,11 +35,10 @@ export default function AddBarDialogue({modalShow, setModalShow, editing, onSave
                 })
                 .finally(() => setCSDisabled(false))
         }, (err) => {
-            console.log(err)
             setLlDisabled(false)
             setCSDisabled(false)
         })
-    }, [])
+    }, [modalShow])
 
     return (
         <>
@@ -59,7 +64,8 @@ export default function AddBarDialogue({modalShow, setModalShow, editing, onSave
                             <Form.Control
                                 type="text"
                                 placeholder="Enter latitude"
-                                defaultValue={latLong[0]}
+                                value={latitude}
+                                onChange={(e) => setLatitude(e.target.value)}
                                 disabled={llDisabled}
                                 name="lat"
                             />
@@ -71,7 +77,8 @@ export default function AddBarDialogue({modalShow, setModalShow, editing, onSave
                                 type="text"
                                 placeholder="Enter longitude"
                                 disabled={llDisabled}
-                                defaultValue={latLong[1]}
+                                value={longitude}
+                                onChange={(e) => setLongitude(e.target.value)}
                                 name="long"
                             />
                         </Form.Group>
@@ -82,7 +89,8 @@ export default function AddBarDialogue({modalShow, setModalShow, editing, onSave
                                 type="text"
                                 placeholder="Enter city"
                                 disabled={csDisabled}
-                                defaultValue={city}
+                                value={city}
+                                onChange={(e) => setCity(e.target.value)}
                                 name="city"
                             />
                         </Form.Group>
@@ -93,7 +101,8 @@ export default function AddBarDialogue({modalShow, setModalShow, editing, onSave
                                 type="text"
                                 placeholder="Enter state"
                                 disabled={csDisabled}
-                                defaultValue={state}
+                                value={state}
+                                onChange={(e) => setState(e.target.value)}
                                 name="state"
                             />
                         </Form.Group>
