@@ -6,13 +6,17 @@ export class Bar {
     name: string;
     lat: number;
     long: number;
+    city: string;
+    state: string;
 }
 
 export async function create(bar: Bar): Promise<Bar> {
     const [id] = await db.insert({
         name: bar.name,
         lat: bar.lat,
-        long: bar.long
+        long: bar.long,
+        city: bar.city,
+        state: bar.state,
     }).into('bars');
 
     const b = new Bar();
@@ -20,6 +24,8 @@ export async function create(bar: Bar): Promise<Bar> {
     b.name = bar.name;
     b.lat = bar.lat;
     b.long = bar.long;
+    b.state = bar.state;
+    b.city = bar.city;
     return b
 }
 
@@ -33,6 +39,8 @@ export async function findBy(args: any): Promise<Bar[]> {
         b.name = r.name;
         b.lat = r.lat;
         b.long = r.long;
+        b.state = r.state;
+        b.city = r.city;
         return b
     })
 }

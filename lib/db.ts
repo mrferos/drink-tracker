@@ -1,9 +1,5 @@
-const db = require('knex')({
-    client: 'sqlite3', // or 'better-sqlite3'
-    useNullAsDefault: true,
-    connection: {
-        filename: process.env.SQLITE_PATH || '../db.sqlite',
-    },
-});
+const environment = process.env.NODE_ENV || 'development'; // Defaults to development
+const config = require('../knexfile')[environment];
+const db = require('knex')(config);
 
 export default db;

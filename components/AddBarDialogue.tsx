@@ -1,9 +1,13 @@
 import {Button, Form, Modal} from "react-bootstrap";
 import {useEffect, useState} from "react";
+import post from "../lib/ajax/post";
 
 export default function AddBarDialogue({modalShow, setModalShow, editing, onSave}) {
     const [latLong, setLatLong] = useState([0, 0])
     const [llDisabled, setLlDisabled] = useState(true)
+    const [csDisabled, setCSDisabled] = useState(true)
+    const [city, setCity] = useState("")
+    const [state, setState] = useState("")
     const handleSubmit = (e) => {
         e.preventDefault()
         const formData = new FormData(e.target);
@@ -15,9 +19,19 @@ export default function AddBarDialogue({modalShow, setModalShow, editing, onSave
         navigator.geolocation.getCurrentPosition(({coords}) => {
             setLatLong([coords.latitude, coords.longitude])
             setLlDisabled(false)
+            post('/api/geocoding/reverse', {
+                lat: coords.latitude,
+                lon: coords.longitude,
+            }).then(resp => resp.json())
+                .then(data => {
+                    setCity(data.city)
+                    setState(data.state)
+                })
+                .finally(() => setCSDisabled(false))
         }, (err) => {
             console.log(err)
             setLlDisabled(false)
+            setCSDisabled(false)
         })
     }, [])
 
@@ -59,6 +73,28 @@ export default function AddBarDialogue({modalShow, setModalShow, editing, onSave
                                 disabled={llDisabled}
                                 defaultValue={latLong[1]}
                                 name="long"
+                            />
+                        </Form.Group>
+
+                        <Form.Group controlId="forCity" className="mb-3">
+                            <Form.Label>City</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="Enter city"
+                                disabled={csDisabled}
+                                defaultValue={city}
+                                name="city"
+                            />
+                        </Form.Group>
+
+                        <Form.Group controlId="forState" className="mb-3">
+                            <Form.Label>State</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="Enter state"
+                                disabled={csDisabled}
+                                defaultValue={state}
+                                name="state"
                             />
                         </Form.Group>
                     </Modal.Body>
