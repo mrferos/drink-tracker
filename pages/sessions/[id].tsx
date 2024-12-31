@@ -49,7 +49,7 @@ export default function Session() {
                 time = moment.unix(prev)
             }
 
-            time = time.add(10, 'second')
+            time = time.add(1, 'hour')
             localStorage.setItem(tillNextDrinkKey, JSON.stringify(time.unix()))
 
             return time.unix()
