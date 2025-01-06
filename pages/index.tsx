@@ -1,6 +1,6 @@
 import {Card} from "react-bootstrap";
 import {useEffect, useState} from "react";
-import {CartesianGrid, Line, LineChart, ResponsiveContainer, XAxis, YAxis} from "recharts";
+import {CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis} from "recharts";
 
 interface Sums {
     monthDaily: {date: string, sum: number}[];
@@ -58,6 +58,7 @@ export default function Index() {
                             <CartesianGrid strokeDasharray="3 3" />
                             <XAxis dataKey="date" />
                             <YAxis />
+                            <Tooltip />
                             <Line type="monotone" dataKey="sum" />
                         </LineChart>
                     </ResponsiveContainer>
